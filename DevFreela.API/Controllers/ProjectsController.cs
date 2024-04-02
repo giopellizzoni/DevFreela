@@ -2,72 +2,71 @@ using DevFreela.API.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
-namespace DevFreela.API.Controllers
+namespace DevFreela.API.Controllers;
+
+[Route("api/projects")]
+public class ProjectsController : ControllerBase
 {
-    [Route("api/projects")]
-    public class ProjectsController : ControllerBase
+    private readonly OpeningTimeOption _options;
+
+    public ProjectsController(IOptions<OpeningTimeOption> options)
     {
-        private readonly OpeningTimeOption _options;
+        _options = options.Value;
+    }
 
-        public ProjectsController(IOptions<OpeningTimeOption> options)
-        {
-            _options = options.Value;
-        }
+    [HttpGet]
+    public IActionResult Get(string query)
+    {
+        return Ok();
+    }
 
-        [HttpGet]
-        public IActionResult Get(string query)
-        {
-            return Ok();
-        }
+    [HttpGet("{id}")]
+    public IActionResult GetById(int id)
+    {
+        return Ok();
+    }
 
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+    [HttpPost]
+    public IActionResult Post([FromBody] CreateProjectModel createProject)
+    {
+        if (createProject.Title.Length > 50)
         {
-            return Ok();
+            return BadRequest();
         }
+        return CreatedAtAction(nameof(GetById), new { id = createProject.Id }, createProject);
+    }
 
-        [HttpPost]
-        public IActionResult Post([FromBody] CreateProjectModel createProject)
+    [HttpPut("{id}")]
+    public IActionResult Put(int id, [FromBody] UpdateProjectModel updateProject)
+    {
+        if (updateProject.Description.Length > 200)
         {
-            if (createProject.Title.Length > 50)
-            {
-                return BadRequest();
-            }
-            return CreatedAtAction(nameof(GetById), new { id = createProject.Id }, createProject);
+            return BadRequest();
         }
+        return NoContent();
+    }
 
-        [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] UpdateProjectModel updateProject)
-        {
-            if (updateProject.Description.Length > 200)
-            {
-                return BadRequest();
-            }
-            return NoContent();
-        }
+    [HttpDelete("{id}")]
+    public IActionResult Delete(int id)
+    {
+        return NoContent();
+    }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            return NoContent();
-        }
+    [HttpPost("{id}/comments")]
+    public IActionResult PostComment(int id, [FromBody] CreateCommentModel createComment)
+    {
+        return NoContent();
+    }
 
-        [HttpPost("{id}/comments")]
-        public IActionResult PostComment(int id, [FromBody] CreateCommentModel createComment)
-        {
-            return NoContent();
-        }
+    [HttpPut("{id}/start")]
+    public IActionResult Start(int id)
+    {
+        return NoContent();
+    }
 
-        [HttpPut("{id}/start")]
-        public IActionResult Start(int id)
-        {
-            return NoContent();
-        }
-
-        [HttpPut("{id}/finish")]
-        public IActionResult Finish(int id)
-        {
-            return NoContent();
-        }
+    [HttpPut("{id}/finish")]
+    public IActionResult Finish(int id)
+    {
+        return NoContent();
     }
 }

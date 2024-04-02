@@ -1,7 +1,6 @@
-namespace DevFreela.API.Model
+namespace DevFreela.API.Model;
+
+public class UpdateProjectModel
 {
-    public class UpdateProjectModel
-    {
-        public required string Description { get; set; }
-    }
+    public required string Description { get; set; }
 }
