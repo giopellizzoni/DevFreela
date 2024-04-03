@@ -25,6 +25,7 @@ public class DevFreelaDbContext
             new("ASP.NET Core"), 
             new("Entity Framework")
         };
+        Comments = new List<ProjectComment>();
     }
 
     public List<Project> Projects { get; set; }

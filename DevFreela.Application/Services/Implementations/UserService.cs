@@ -15,7 +15,7 @@ public class UserService : IUserService
         _dbContext = dbContext;
     }
 
-    public UserViewModel GetUser(int id)
+    public UserViewModel? GetUser(int id)
     {
         var user = _dbContext.Users.SingleOrDefault(u => u.Id == id);
         if (user == null) return null;
