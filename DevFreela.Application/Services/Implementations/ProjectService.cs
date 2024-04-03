@@ -1,20 +1,24 @@
+using Dapper;
 using DevFreela.Application.InputModels;
 using DevFreela.Application.Services.Interfaces;
 using DevFreela.Application.ViewModels;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Enums;
 using DevFreela.Infrastructure.Persistence;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DevFreela.Application.Services.Implementations;
 
 public class ProjectService : IProjectService
 {
     private readonly DevFreelaDbContext _dbContext;
-
-    public ProjectService(DevFreelaDbContext dbContext)
+    private readonly string _connectionstring;
+    public ProjectService(DevFreelaDbContext dbContext, IConfiguration configuration)
     {
         _dbContext = dbContext;
+        _connectionstring = configuration.GetConnectionString("DevFreelaCs");
     }
 
     public List<ProjectViewModel> GetAll(string query)
@@ -81,7 +85,14 @@ public class ProjectService : IProjectService
     {
         var project = _dbContext.Projects.SingleOrDefault(p => p.Id == id);
         project?.Start();
-        _dbContext.SaveChanges();
+        // _dbContext.SaveChanges();
+        using (var sqlConnection = new SqlConnection(_connectionstring))
+        {
+            sqlConnection.Open();
+            var script = "UPDATE Project SET Status = @status, StartedAt = @startedat WHERE Id = @id";
+            sqlConnection.Execute(script, new { status = project?.Status, startedat = project?.StartedAt, id });
+            
+        }
     }
 
     public void Finish(int id)

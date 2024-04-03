@@ -1,4 +1,5 @@
 using DevFreela.API.Model;
+using DevFreela.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFreela.API.Controllers;
@@ -6,10 +7,19 @@ namespace DevFreela.API.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
+    private readonly IUserService _userService;
+
+    public UsersController(IUserService userService)
+    {
+        _userService = userService;
+    }
+
     [HttpGet("{id}")]
     public IActionResult GetById(int id)
     {
-        return Ok();
+        var userViewModel = _userService.GetUser(id);
+        if (userViewModel == null) return NotFound();
+        return Ok(userViewModel);
     }
 
     [HttpPost]

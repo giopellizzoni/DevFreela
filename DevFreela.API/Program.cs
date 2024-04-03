@@ -21,6 +21,7 @@ builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseSqlServe
 
 // Dependency Injection
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
@@ -31,5 +32,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapControllers();
 app.UseHttpsRedirection();
 app.Run();
