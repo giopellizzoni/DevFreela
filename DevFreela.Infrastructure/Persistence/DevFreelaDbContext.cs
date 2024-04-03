@@ -1,35 +1,23 @@
+using System.Reflection;
 using DevFreela.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace DevFreela.Infrastructure.Persistence;
 
-public class DevFreelaDbContext
+public class DevFreelaDbContext : DbContext
 {
-    public DevFreelaDbContext()
+    public DevFreelaDbContext(DbContextOptions<DevFreelaDbContext> options) : base(options)
     {
-        Projects = new List<Project>
-        {
-            new("Meu Project ASPNET Core1", "Minha Descrição do Project1", 1, 1, 10000),
-            new("Meu Project ASPNET Core2", "Minha Descrição do Project2", 1, 1, 20000),
-            new("Meu Project ASPNET Core3", "Minha Descrição do Project3", 1, 1, 30000)
-        };
-
-        Users = new List<User>
-        {
-            new("Blondell Snell", "bsnell0@amazon.de", new DateTime(1982, 06, 10)),
-            new("Gillian Rulf", "grulf1@auda.org.au", new DateTime(2001, 10, 04)),
-            new("Amie Spirit", "aspirit2@issuu.com", new DateTime(1987, 09, 27))
-        };
-        Skills = new List<Skill>
-        {
-            new("C#"), 
-            new("ASP.NET Core"), 
-            new("Entity Framework")
-        };
-        Comments = new List<ProjectComment>();
     }
 
-    public List<Project> Projects { get; set; }
-    public List<User> Users { get; set; }
-    public List<Skill> Skills { get; set; }
-    public List<ProjectComment> Comments { get; set; }
+    public DbSet<Project> Projects { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Skill> Skills { get; set; }
+    public DbSet<UserSkill> UserSkills { get; set; }
+    public DbSet<ProjectComment> Comments { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    }
 }
