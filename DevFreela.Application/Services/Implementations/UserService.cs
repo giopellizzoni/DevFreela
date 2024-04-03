@@ -15,21 +15,18 @@ public class UserService : IUserService
         _dbContext = dbContext;
     }
 
-    public UserViewModel GetById(int id)
+    public UserViewModel GetUser(int id)
     {
         var user = _dbContext.Users.SingleOrDefault(u => u.Id == id);
-        var userVieModel = new UserViewModel(user.FullName, user.Email);
-        return userVieModel;
+        if (user == null) return null;
+        return new UserViewModel(user.FullName, user.Email);
+        
     }
 
-    public void Create(NewUserInputModel inputModel)
+    public int Create(NewUserInputModel inputModel)
     {
         var user = new User(inputModel.FullName, inputModel.Email, inputModel.Birthdate);
         _dbContext.Users.Add(user);
-    }
-
-    public void Login(int id, LoginInputModel inputModel)
-    {
-        
+        return user.Id;
     }
 }
