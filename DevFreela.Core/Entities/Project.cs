@@ -26,7 +26,7 @@ public class Project : BaseEntity
 
     public DateTime CreateAt { get; private set; }
     public DateTime? StartedAt { get; private set; }
-    public DateTime FinishedAt { get; private set; }
+    public DateTime? FinishedAt { get; private set; }
     public ProjectStatusEnum Status { get; private set; }
     public List<ProjectComment> Comments { get; private set; }
 

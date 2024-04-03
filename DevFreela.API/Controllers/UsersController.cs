@@ -1,4 +1,5 @@
 using DevFreela.API.Model;
+using DevFreela.Application.InputModels;
 using DevFreela.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,9 +24,10 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] CreateUserModel createUserModel)
+    public IActionResult Post([FromBody] NewUserInputModel inputModel)
     {
-        return CreatedAtAction(nameof(GetById), new { id = 1 }, createUserModel);
+        var id = _userService.Create(inputModel);
+        return CreatedAtAction(nameof(GetById), new { id = id }, inputModel);
     }
 
     [HttpPut("{id}/login")]

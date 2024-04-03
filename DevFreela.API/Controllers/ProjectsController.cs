@@ -1,84 +1,87 @@
 using DevFreela.API.Model;
+using DevFreela.Application.Commands.CreateComment;
+using DevFreela.Application.Commands.CreateProject;
+using DevFreela.Application.Commands.DeleteProject;
+using DevFreela.Application.Commands.FinishProject;
+using DevFreela.Application.Commands.StartProject;
+using DevFreela.Application.Commands.UpdateProject;
 using DevFreela.Application.InputModels;
+using DevFreela.Application.Queries.GetAllProjects;
+using DevFreela.Application.Queries.GetProjectById;
 using DevFreela.Application.Services.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace DevFreela.API.Controllers;
 
 [Route("api/projects")]
-public class ProjectsController : ControllerBase
+public class ProjectsController(IMediator mediator) : ControllerBase
 {
-    private readonly IProjectService _projectService;
-
-    public ProjectsController(IProjectService projectService)
-    {
-        _projectService = projectService;
-    }  
-
     [HttpGet]
-    public IActionResult Get(string query)
+    public async Task<IActionResult> Get(string query)
     {
-        var projects = _projectService.GetAll(query);
+        var getAllProjectsQuery = new GetAllProjectsQuery(query);
+        var projects =await mediator.Send(getAllProjectsQuery);
         return Ok(projects);
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var project = _projectService.GetById(id);
-        if (project == null) return NotFound();
-        
+        var projectByIdQuery = new GetProjectByIdQuery(id);
+        var project = await mediator.Send(projectByIdQuery);
         return Ok(project);
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] NewProjectInputModel inputModel)
+    public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
     {
-        if (inputModel.Title.Length > 50)
-        {
-            return BadRequest();
-        }
-        var id = _projectService.Create(inputModel);
-        return CreatedAtAction(nameof(GetById), new { id }, inputModel);
+        if (command.Title.Length > 50) return BadRequest();
+        
+        var id = await mediator.Send(command);
+        return CreatedAtAction(nameof(GetById), new { id }, command);
     }
 
     [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody] UpdateProjectInputModel inputModel)
+    public async Task<IActionResult> Put(int id, [FromBody] UpdateProjectCommand command)
     {
-        if (inputModel.Description.Length > 200)
+        if (command.Description.Length > 200)
         {
             return BadRequest();
         }
-        _projectService.Update(inputModel);
+        await mediator.Send(command);
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public IActionResult Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
-        _projectService.Delete(id);
+        var command = new DeleteProjectCommand(id);
+        await mediator.Send(command);
         return NoContent();
     }
 
     [HttpPost("{id}/comments")]
-    public IActionResult PostComment(int id, [FromBody] CreateCommentInputModel inputModel)
+    public async Task<IActionResult> PostComment(int id, [FromBody] CreateCommentCommand command)
     {
-        _projectService.CreateComment(inputModel);
+        await mediator.Send(command);
         return NoContent();
     }
 
     [HttpPut("{id}/start")]
-    public IActionResult Start(int id)
+    public async Task<IActionResult> Start(int id)
     {
-        _projectService.Start(id);
+        var command = new StartProjectCommand(id);
+        await mediator.Send(command);
         return NoContent();
     }
 
     [HttpPut("{id}/finish")]
-    public IActionResult Finish(int id)
+    public async Task<IActionResult> Finish(int id)
     {
-        _projectService.Finish(id);
+        var command = new FinishProjectCommand(id);
+        await mediator.Send(command);
         return NoContent();
     }
 }
