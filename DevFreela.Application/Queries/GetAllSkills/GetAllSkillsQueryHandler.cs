@@ -7,8 +7,6 @@ namespace DevFreela.Application.Queries.GetAllSkills;
 public class GetAllSkillsQueryHandler(ISkillRepository skillRepository)
     : IRequestHandler<GetAllSkillsQuery, List<SkillViewModel>>
 {
- 
-
     public async Task<List<SkillViewModel>> Handle(GetAllSkillsQuery request, CancellationToken cancellationToken)
     {
         var skills = await skillRepository.GetAllAsync();

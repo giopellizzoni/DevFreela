@@ -12,8 +12,5 @@ public class CreateProjectCommandHandler(IProjectRepository projectRepository) :
             request.IdFreelancer, request.TotalCost);
         await projectRepository.AddAsync(project);
         return project.Id;
-        
     }
-    
-    
 }
