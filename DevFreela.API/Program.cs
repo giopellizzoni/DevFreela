@@ -1,7 +1,4 @@
-using DevFreela.API.Model;
 using DevFreela.Application.Commands.CreateProject;
-using DevFreela.Application.Services.Implementations;
-using DevFreela.Application.Services.Interfaces;
 using DevFreela.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -23,8 +20,9 @@ builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseSqlServe
 
 
 // Dependency Injection
-builder.Services.AddScoped<IUserService, UserService>();
 
+
+// Building App 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
