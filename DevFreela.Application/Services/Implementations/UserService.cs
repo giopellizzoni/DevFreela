@@ -23,11 +23,4 @@ public class UserService : IUserService
         
     }
 
-    public int Create(NewUserInputModel inputModel)
-    {
-        var user = new User(inputModel.FullName, inputModel.Email, inputModel.Birthdate);
-        _dbContext.Users.Add(user);
-        _dbContext.SaveChanges();
-        return user.Id;
-    }
 }
