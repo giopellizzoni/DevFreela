@@ -1,9 +1,6 @@
-using Dapper;
 using DevFreela.Application.ViewModels;
 using DevFreela.Core.Repositories;
 using MediatR;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 
 namespace DevFreela.Application.Queries.GetAllSkills;
 
