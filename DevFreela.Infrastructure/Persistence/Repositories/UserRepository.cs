@@ -8,18 +8,18 @@ public class UserRepository(DevFreelaDbContext dbContext) : IUserRepository
 {
     public async Task<User?> GetUserAsync(int id)
     {
-        var user = await dbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
+        var user = await dbContext.Users!.SingleOrDefaultAsync(u => u.Id == id);
         return user;
     }
 
     public async Task AddUserAsync(User user)
     {
-        await dbContext.Users.AddAsync(user);
+        await dbContext.Users!.AddAsync(user);
         await dbContext.SaveChangesAsync();
     }
 
     public async Task<User?> GetUserByEmailAndPasswordAsync(string email, string passwordHash)
     {
-        return await dbContext.Users.SingleOrDefaultAsync(u => u.Email == email && u.Password == passwordHash);
+        return await dbContext.Users!.SingleOrDefaultAsync(u => u.Email == email && u.Password == passwordHash);
     }
 }
