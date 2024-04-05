@@ -11,6 +11,6 @@ public class GetUserQueryHandler(IUserRepository userRepository) : IRequestHandl
         var user = await userRepository.GetUserAsync(request.Id);
         return user == null ? 
             null : 
-            new UserViewModel(user.FullName, user.Email);
+            new UserViewModel(user.FullName, user.Email, user.Birthdate);
     }
 }

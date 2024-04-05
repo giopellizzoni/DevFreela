@@ -33,8 +33,6 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
     {
-        if (command.Title.Length > 50) return BadRequest();
-        
         var id = await mediator.Send(command);
         return CreatedAtAction(nameof(GetById), new { id }, command);
     }
@@ -42,10 +40,6 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Put(int id, [FromBody] UpdateProjectCommand command)
     {
-        if (command.Description.Length > 200)
-        {
-            return BadRequest();
-        }
         await mediator.Send(command);
         return NoContent();
     }
