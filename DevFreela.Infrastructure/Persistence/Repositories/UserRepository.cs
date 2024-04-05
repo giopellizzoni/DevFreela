@@ -17,4 +17,9 @@ public class UserRepository(DevFreelaDbContext dbContext) : IUserRepository
         await dbContext.Users.AddAsync(user);
         await dbContext.SaveChangesAsync();
     }
+
+    public async Task<User?> GetUserByEmailAndPasswordAsync(string email, string passwordHash)
+    {
+        return await dbContext.Users.SingleOrDefaultAsync(u => u.Email == email && u.Password == passwordHash);
+    }
 }
