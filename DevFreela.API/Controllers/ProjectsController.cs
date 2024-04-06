@@ -24,6 +24,7 @@ public class ProjectsController(IMediator mediator) : ControllerBase
         return Ok(projects);
     }
 
+    // Retrieve project by Id
     [HttpGet("{id}")]
     [Authorize(Roles = "freelancer, client")]
     public async Task<IActionResult> GetById(int id)
