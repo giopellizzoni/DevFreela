@@ -89,6 +89,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ISkillRepository, SkillRepository>();
 builder.Services.AddScoped<IAuthservice, AuthService>();
 
+builder.Services.AddHttpsRedirection(options => { options.HttpsPort = 443; });
+
 // Building App 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -101,5 +103,5 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.Run();
