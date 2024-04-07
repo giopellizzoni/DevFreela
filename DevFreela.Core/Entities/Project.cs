@@ -45,9 +45,15 @@ public class Project : BaseEntity
 
     public void Finish()
     {
-        if (Status is not ProjectStatusEnum.InProgress) return;
+        if (Status is not ProjectStatusEnum.PaymentPending) return;
         Status = ProjectStatusEnum.Finished;
         FinishedAt = DateTime.Now;
+    }
+
+    public void SetPaymentPending()
+    {
+        Status = ProjectStatusEnum.PaymentPending;
+        FinishedAt = null;
     }
 
     public void Update(string title, string description, decimal totalcost)

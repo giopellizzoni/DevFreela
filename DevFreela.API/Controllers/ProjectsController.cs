@@ -78,10 +78,12 @@ public class ProjectsController(IMediator mediator) : ControllerBase
 
     [HttpPut("{id}/finish")]
     [Authorize(Roles = "client")]
-    public async Task<IActionResult> Finish(int id)
+    public async Task<IActionResult> Finish(int id, [FromBody] FinishProjectCommand command)
     {
-        var command = new FinishProjectCommand(id);
+        command.Id = id;
+
         await mediator.Send(command);
-        return NoContent();
+        
+        return Accepted();
     }
 }

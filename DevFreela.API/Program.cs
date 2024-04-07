@@ -1,11 +1,14 @@
 using System.Text;
+using DevFreela.API.Extensions;
 using DevFreela.API.Filters;
 using DevFreela.Application.Commands.CreateProject;
-using DevFreela.Application.Commands.CreateUser;
+using DevFreela.Application.Consumers;
 using DevFreela.Application.Validators;
 using DevFreela.Core.Repositories;
 using DevFreela.Core.Services;
 using DevFreela.Infrastructure.AuthServices;
+using DevFreela.Infrastructure.MessageBus;
+using DevFreela.Infrastructure.Payments;
 using DevFreela.Infrastructure.Persistence;
 using DevFreela.Infrastructure.Persistence.Repositories;
 using FluentValidation;
@@ -80,16 +83,14 @@ builder.Services
 
 // Database Setup
 var connectionString = builder.Configuration.GetConnectionString("DevFreelaCs");
-//builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseSqlServer(connectionString));
-builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseInMemoryDatabase("DevFreelaCs"));
+builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseSqlServer(connectionString));
+//builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseInMemoryDatabase("DevFreelaCs"));
+
+builder.Services.AddHostedService<PaymentApprovedConsumer>();
+builder.Services.AddHttpClient();
 
 // Dependency Injection
-builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ISkillRepository, SkillRepository>();
-builder.Services.AddScoped<IAuthservice, AuthService>();
-
-builder.Services.AddHttpsRedirection(options => { options.HttpsPort = 443; });
+builder.Services.AddInfrastructure();
 
 // Building App 
 var app = builder.Build();

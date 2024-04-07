@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DevFreela.Infrastructure.AuthServices;
 
-public class AuthService(IConfiguration configuration) : IAuthservice
+public class AuthService(IConfiguration configuration) : IAuthService
 {
     public string GenerateJwtToken(string? email, string? role)
     {

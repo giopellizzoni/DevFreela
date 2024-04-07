@@ -5,7 +5,7 @@ using MediatR;
 
 namespace DevFreela.Application.Commands.LoginUser;
 
-public class LoginUserCommandHandler(IAuthservice authService, IUserRepository userRepository)
+public class LoginUserCommandHandler(IAuthService authService, IUserRepository userRepository)
     : IRequestHandler<LoginUserCommand, LoginViewModel?>
 {
 
