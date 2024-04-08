@@ -6,16 +6,22 @@ using Microsoft.Extensions.Configuration;
 
 namespace DevFreela.Infrastructure.Payments
 {
-    public class PaymentService(IMessageBusService messageBusService)
-        : IPaymentService
+    public class PaymentService : IPaymentService
     {
+        private readonly IMessageBusService _messageBusService;
+
+        public PaymentService(IMessageBusService messageBusService)
+        {
+            _messageBusService = messageBusService;
+        }
+
         private const string QUEUE_NAME = "Payments";
 
         public void ProcessPayment(PaymentInfoDto paymentInfoDto)
         {
             var paymentInfoJson = JsonSerializer.Serialize(paymentInfoDto);
             var paymentInfoBytes = Encoding.UTF8.GetBytes(paymentInfoJson);
-            messageBusService.Publish(QUEUE_NAME, paymentInfoBytes);
+            _messageBusService.Publish(QUEUE_NAME, paymentInfoBytes);
         }
     }
 }

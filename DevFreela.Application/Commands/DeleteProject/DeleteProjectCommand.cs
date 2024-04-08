@@ -2,7 +2,12 @@ using MediatR;
 
 namespace DevFreela.Application.Commands.DeleteProject;
 
-public class DeleteProjectCommand(int id) : IRequest<Unit>
+public class DeleteProjectCommand : IRequest<Unit>
 {
-    public int Id { get; private set; } = id;
+    public DeleteProjectCommand(int id)
+    {
+        Id = id;
+    }
+
+    public int Id { get; private set; }
 }

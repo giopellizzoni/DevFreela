@@ -3,14 +3,21 @@ using MediatR;
 
 namespace DevFreela.Application.Commands.UpdateProject;
 
-public class UpdateProjectCommandHandler(IProjectRepository projectRepository) : IRequestHandler<UpdateProjectCommand, Unit>
+public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand, Unit>
 {
+    private readonly IProjectRepository _projectRepository;
+
+    public UpdateProjectCommandHandler(IProjectRepository projectRepository)
+    {
+        _projectRepository = projectRepository;
+    }
+
     public async Task<Unit> Handle(UpdateProjectCommand request, CancellationToken cancellationToken)
     {
-        var project = await projectRepository.GetByIdAsync(request.Id);
+        var project = await _projectRepository.GetByIdAsync(request.Id);
 
         project?.Update(request.Title, request.Description, request.TotalCost);
-        await projectRepository.SaveChangesAsync();
+        await _projectRepository.SaveChangesAsync();
         return Unit.Value;
     }
 }

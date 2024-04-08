@@ -32,6 +32,6 @@ steps:
     appType: 'webAppLinux'
     WebAppName: 'devfreela'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    RuntimeStack: 'DOTNETCORE|8.0'
+    RuntimeStack: 'DOTNETCORE|7.0'
 
 

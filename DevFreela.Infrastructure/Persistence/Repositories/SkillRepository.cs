@@ -6,9 +6,14 @@ using Microsoft.Extensions.Configuration;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories;
 
-public class SkillRepository(IConfiguration configuration) : ISkillRepository
+public class SkillRepository : ISkillRepository
 {
-    private readonly string? _connectionString = configuration.GetConnectionString("DevFreelaCs");
+    private readonly string? _connectionString;
+
+    public SkillRepository(IConfiguration configuration)
+    {
+        _connectionString = configuration.GetConnectionString("DevFreelaCs");
+    }
 
     public async Task<List<Skill>> GetAllAsync()
     {

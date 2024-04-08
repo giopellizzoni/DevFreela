@@ -13,14 +13,21 @@ using Microsoft.AspNetCore.Mvc;
 namespace DevFreela.API.Controllers;
 
 [Route("api/projects")]
-public class ProjectsController(IMediator mediator) : ControllerBase
+public class ProjectsController : ControllerBase
 {
+    private readonly IMediator _mediator;
+
+    public ProjectsController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
     [HttpGet]
     [Authorize(Roles = "freelancer, client")]
     public async Task<IActionResult> Get(string query)
     {
         var getAllProjectsQuery = new GetAllProjectsQuery(query);
-        var projects =await mediator.Send(getAllProjectsQuery);
+        var projects =await _mediator.Send(getAllProjectsQuery);
         return Ok(projects);
     }
 
@@ -30,7 +37,7 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetById(int id)
     {
         var projectByIdQuery = new GetProjectByIdQuery(id);
-        var project = await mediator.Send(projectByIdQuery);
+        var project = await _mediator.Send(projectByIdQuery);
         return Ok(project);
     }
 
@@ -38,7 +45,7 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     [Authorize(Roles = "client")]
     public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
     {
-        var id = await mediator.Send(command);
+        var id = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetById), new { id }, command);
     }
 
@@ -46,7 +53,7 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     [Authorize(Roles = "client")]
     public async Task<IActionResult> Put(int id, [FromBody] UpdateProjectCommand command)
     {
-        await mediator.Send(command);
+        await _mediator.Send(command);
         return NoContent();
     }
 
@@ -55,7 +62,7 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         var command = new DeleteProjectCommand(id);
-        await mediator.Send(command);
+        await _mediator.Send(command);
         return NoContent();
     }
 
@@ -63,7 +70,7 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     [Authorize(Roles = "client, freelancer")]
     public async Task<IActionResult> PostComment(int id, [FromBody] CreateCommentCommand command)
     {
-        await mediator.Send(command);
+        await _mediator.Send(command);
         return NoContent();
     }
 
@@ -72,7 +79,7 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> Start(int id)
     {
         var command = new StartProjectCommand(id);
-        await mediator.Send(command);
+        await _mediator.Send(command);
         return NoContent();
     }
 
@@ -82,7 +89,7 @@ public class ProjectsController(IMediator mediator) : ControllerBase
     {
         command.Id = id;
 
-        await mediator.Send(command);
+        await _mediator.Send(command);
         
         return Accepted();
     }

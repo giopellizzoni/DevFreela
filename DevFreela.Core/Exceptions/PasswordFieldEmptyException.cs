@@ -1,3 +1,8 @@
 namespace DevFreela.Core.Exceptions;
 
-public class PasswordFieldEmptyException() : Exception("Password is null or empty");
+public class PasswordFieldEmptyException : Exception
+{
+    public PasswordFieldEmptyException() : base("Password is null or empty")
+    {
+    }
+}

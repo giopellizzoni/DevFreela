@@ -10,13 +10,20 @@ namespace DevFreela.API.Controllers;
 
 [Route("api/[controller]")]
 [Authorize]
-public class UsersController(IMediator mediator) : ControllerBase
+public class UsersController : ControllerBase
 {
+    private readonly IMediator _mediator;
+
+    public UsersController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         var getUserQuery = new GetUserQuery(id);
-        var userViewModel = await mediator.Send(getUserQuery);
+        var userViewModel = await _mediator.Send(getUserQuery);
         if (userViewModel == null) return NotFound();
         return Ok(userViewModel);
     }
@@ -33,7 +40,7 @@ public class UsersController(IMediator mediator) : ControllerBase
                 .ToList();
             return BadRequest(messages);
         }
-        var id = await mediator.Send(command);
+        var id = await _mediator.Send(command);
         return CreatedAtAction(nameof(GetById), new { id = id }, command);
     }
 
@@ -41,7 +48,7 @@ public class UsersController(IMediator mediator) : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
     {
-        var loginUserViewModel = await mediator.Send(command);
+        var loginUserViewModel = await _mediator.Send(command);
         if (loginUserViewModel == null) return BadRequest();
         return Ok(loginUserViewModel);
     }

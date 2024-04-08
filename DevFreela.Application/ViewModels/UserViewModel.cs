@@ -1,8 +1,15 @@
 namespace DevFreela.Application.ViewModels;
 
-public class UserViewModel(string? username, string? email, DateTime birthDate)
+public class UserViewModel
 {
-    public string? Username { get; private set; } = username;
-    public string? Email { get; private set; } = email;
-    public DateTime BirthDate { get; set; } = birthDate;
+    public UserViewModel(string? username, string? email, DateTime birthDate)
+    {
+        Username = username;
+        Email = email;
+        BirthDate = birthDate;
+    }
+
+    public string? Username { get; private set; }
+    public string? Email { get; private set; }
+    public DateTime BirthDate { get; set; }
 }

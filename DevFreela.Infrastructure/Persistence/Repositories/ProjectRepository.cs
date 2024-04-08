@@ -4,16 +4,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories;
 
-public class ProjectRepository(DevFreelaDbContext dbContext) : IProjectRepository
+public class ProjectRepository : IProjectRepository
 {
+    private readonly DevFreelaDbContext _dbContext;
+
+    public ProjectRepository(DevFreelaDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
     public async Task<List<Project>> GetAllAsync()
     {
-        return await dbContext.Projects!.ToListAsync();
+        return await _dbContext.Projects!.ToListAsync();
     }
 
     public async Task<Project?> GetByIdAsync(int id)
     {
-        return await dbContext.Projects!
+        return await _dbContext.Projects!
             .Include(p => p.Client)
             .Include(p => p.Freelancer)
             .SingleOrDefaultAsync(p => p.Id == id);
@@ -21,18 +28,18 @@ public class ProjectRepository(DevFreelaDbContext dbContext) : IProjectRepositor
 
     public async Task AddAsync(Project project)
     {
-        await dbContext.Projects!.AddAsync(project);
+        await _dbContext.Projects!.AddAsync(project);
         await SaveChangesAsync();
     }
 
     public async Task AddCommentAsync(ProjectComment projectComment)
     {
-        await dbContext.Comments!.AddAsync(projectComment );
+        await _dbContext.Comments!.AddAsync(projectComment );
         await SaveChangesAsync();
     }
 
     public async Task SaveChangesAsync()
     {
-        await dbContext.SaveChangesAsync();
+        await _dbContext.SaveChangesAsync();
     }
 }

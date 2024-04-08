@@ -9,13 +9,20 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace DevFreela.Infrastructure.AuthServices;
 
-public class AuthService(IConfiguration configuration) : IAuthService
+public class AuthService : IAuthService
 {
+    private readonly IConfiguration _configuration;
+
+    public AuthService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
     public string GenerateJwtToken(string? email, string? role)
     {
-        var issuer = configuration["Jwt:Issuer"];
-        var audience = configuration["Jwt:Audience"];
-        var key = configuration["Jwt:Key"];
+        var issuer = _configuration["Jwt:Issuer"];
+        var audience = _configuration["Jwt:Audience"];
+        var key = _configuration["Jwt:Key"];
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 

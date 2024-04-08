@@ -3,7 +3,12 @@ using MediatR;
 
 namespace DevFreela.Application.Queries.GetUser;
 
-public class GetUserQuery(int id) : IRequest<UserViewModel?>
+public class GetUserQuery : IRequest<UserViewModel?>
 {
-    public int Id { get; private set; } = id;
+    public GetUserQuery(int id)
+    {
+        Id = id;
+    }
+
+    public int Id { get; private set; }
 }

@@ -2,7 +2,12 @@ using MediatR;
 
 namespace DevFreela.Application.Commands.StartProject;
 
-public class StartProjectCommand(int id) : IRequest<Unit>
+public class StartProjectCommand : IRequest<Unit>
 {
-    public int Id { get; private set; } = id;
+    public StartProjectCommand(int id)
+    {
+        Id = id;
+    }
+
+    public int Id { get; private set; }
 }
