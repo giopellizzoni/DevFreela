@@ -30,8 +30,8 @@ public static class InfrastructureModule
         private static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration) {
             var connectionString = configuration.GetConnectionString("DevFreelaCs");
 
-            services.AddDbContext<DevFreelaDbContext>(options => options.UseSqlServer(connectionString));
-            // services.AddDbContext<DevFreelaDbContext>(options => options.UseInMemoryDatabase("DevFreelaDb"));
+            // services.AddDbContext<DevFreelaDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<DevFreelaDbContext>(options => options.UseInMemoryDatabase("DevFreelaDb"));
 
             return services;
         }
