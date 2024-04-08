@@ -1,37 +1,29 @@
-using System.Text;
-using DevFreela.API.Extensions;
 using DevFreela.API.Filters;
-using DevFreela.Application.Commands.CreateProject;
-using DevFreela.Application.Consumers;
+using DevFreela.Application;
 using DevFreela.Application.Validators;
-using DevFreela.Core.Repositories;
-using DevFreela.Core.Services;
-using DevFreela.Infrastructure.AuthServices;
-using DevFreela.Infrastructure.MessageBus;
-using DevFreela.Infrastructure.Payments;
-using DevFreela.Infrastructure.Persistence;
-using DevFreela.Infrastructure.Persistence.Repositories;
+using DevFreela.Infrastructure;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)));
+var configuration = builder.Configuration;
 
+builder.Services
+    .AddInfrastructure(configuration)
+    .AddApplication();
+
+builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)));
+builder.Services.AddEndpointsApiExplorer();
 //FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>();
 
 // MediatR
-builder.Services.AddMediatR(typeof(CreateProjectCommand));
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo {Title = "DevFreela.API", Version = "v1"});
@@ -63,35 +55,6 @@ builder.Services.AddSwaggerGen(c =>
     
 });
 
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-        };
-    });
-
-
-// Database Setup
-var connectionString = builder.Configuration.GetConnectionString("DevFreelaCs");
-builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseSqlServer(connectionString));
-//builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseInMemoryDatabase("DevFreelaCs"));
-
-builder.Services.AddHostedService<PaymentApprovedConsumer>();
-builder.Services.AddHttpClient();
-
-// Dependency Injection
-builder.Services.AddInfrastructure();
-
 // Building App 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -104,5 +67,5 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.Run();
