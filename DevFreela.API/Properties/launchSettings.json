@@ -5,7 +5,8 @@
     "anonymousAuthentication": true
   },
   "profiles": {
-    "https": {
+//    "https": {
+    "DevFreela.API": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
