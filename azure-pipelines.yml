@@ -28,11 +28,10 @@ steps:
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
-    azureSubscription: 'Microsoft Imagine(cfa6b287-0660-4e9a-b33f-9fa75e9999bf)'
+    azureSubscription: 'Microsoft Imagine(2)(cfa6b287-0660-4e9a-b33f-9fa75e9999bf)'
     appType: 'webAppLinux'
     WebAppName: 'devfreela'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
     RuntimeStack: 'DOTNETCORE|8.0'
-    
 
 

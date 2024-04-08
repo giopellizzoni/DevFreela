@@ -10,8 +10,8 @@ public static class ApplicationModule
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services
-            .AddMediatR(typeof(CreateProjectCommand))
-            .AddConsumers();
+            .AddMediatR(typeof(CreateProjectCommand));
+            // .AddConsumers();
 
         return services;
     }
