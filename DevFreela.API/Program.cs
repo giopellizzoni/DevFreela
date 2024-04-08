@@ -19,8 +19,8 @@ builder.Services
 builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)));
 builder.Services.AddEndpointsApiExplorer();
 //FluentValidation
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>();
+// builder.Services.AddFluentValidationAutoValidation();
+// builder.Services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>();
 
 // MediatR
 
@@ -64,8 +64,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
-app.UseHttpsRedirection();
+
 app.Run();
