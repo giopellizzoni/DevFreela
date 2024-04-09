@@ -2,6 +2,7 @@ using DevFreela.Application.Queries.GetAllProjects;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Models;
 using DevFreela.Core.Repositories;
+using DevFreela.Infrastructure.Persistence.UnityOfWork;
 using Moq;
 
 namespace DevFreela.UnitTests.Application.Queries;
@@ -25,9 +26,11 @@ public class GetAllProjectsCommandHandlerTests
         projectRepositoryMock.Setup(pr => pr.GetAllAsync(It.IsAny<string>(), 
             It.IsAny<int>()).Result).Returns(projects);
 
-
+        var unityOfWork = new Mock<IUnityOfWork>();
+        unityOfWork.SetupGet(u => u.Projects).Returns(projectRepositoryMock.Object);
+            
         var getAllProjectsQuery = new GetAllProjectsQuery { Query = "", Page = 1};
-        var getAllProjectsQueryHandler = new GetAllProjectsQueryHandler(projectRepositoryMock.Object);
+        var getAllProjectsQueryHandler = new GetAllProjectsQueryHandler(unityOfWork.Object);
 
 
         var paginationProjectViewModelList = await getAllProjectsQueryHandler

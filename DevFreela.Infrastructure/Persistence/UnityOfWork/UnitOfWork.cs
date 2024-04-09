@@ -16,6 +16,7 @@ public sealed class UnitOfWork : IUnityOfWork
 
     public IProjectRepository Projects { get; }
     public IUserRepository Users { get; }
+    public ISkillRepository Skills { get; set; }
     public async Task BeginTransactionAsync()
     {
         _transaction = await _context.Database.BeginTransactionAsync();

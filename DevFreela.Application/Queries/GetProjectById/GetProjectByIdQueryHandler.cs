@@ -1,21 +1,22 @@
 using DevFreela.Application.ViewModels;
 using DevFreela.Core.Repositories;
+using DevFreela.Infrastructure.Persistence.UnityOfWork;
 using MediatR;
 
 namespace DevFreela.Application.Queries.GetProjectById;
 
 public class GetProjectByIdQueryHandler : IRequestHandler<GetProjectByIdQuery, ProjectDetailsViewModel?>
 {
-    private readonly IProjectRepository _projectRepository;
+    private readonly IUnityOfWork _unityOfWork;
 
-    public GetProjectByIdQueryHandler(IProjectRepository projectRepository)
+    public GetProjectByIdQueryHandler(IUnityOfWork unityOfWork)
     {
-        _projectRepository = projectRepository;
+        _unityOfWork = unityOfWork;
     }
 
     public async Task<ProjectDetailsViewModel?> Handle(GetProjectByIdQuery request, CancellationToken cancellationToken)
     {
-        var project = await _projectRepository.GetByIdAsync(request.Id);
+        var project = await _unityOfWork.Projects.GetByIdAsync(request.Id);
         
         if (project == null) return null;
         var projectsDetailsViewModel = new ProjectDetailsViewModel(
