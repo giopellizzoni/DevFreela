@@ -18,8 +18,12 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
     {
         var project = new Project(request.Title, request.Description, request.IdClient,
             request.IdFreelancer, request.TotalCost);
+        await _unityOfWork.BeginTransactionAsync();
+        
         await _unityOfWork.Projects.AddAsync(project);
         await _unityOfWork.CompleteAsync();
+        
+        await _unityOfWork.CommitTransactionAsync();
         return project.Id;
     }
 }

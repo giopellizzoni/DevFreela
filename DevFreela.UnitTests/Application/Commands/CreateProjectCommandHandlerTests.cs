@@ -21,7 +21,8 @@ public class CreateProjectCommandHandlerTests
         
         var projectRepository = new Mock<IProjectRepository>();
         var unityOfWork = new Mock<IUnityOfWork>();
-        
+
+        unityOfWork.SetupGet(p => p.Projects).Returns(projectRepository.Object);
         var createProjectCommandHandler = new CreateProjectCommandHandler(unityOfWork.Object);
         
         var id = await createProjectCommandHandler.Handle(createProjectCommand, new CancellationToken());
