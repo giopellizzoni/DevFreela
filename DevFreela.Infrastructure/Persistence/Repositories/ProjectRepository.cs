@@ -1,6 +1,7 @@
 using DevFreela.Core.Entities;
 using DevFreela.Core.Models;
 using DevFreela.Core.Repositories;
+using DevFreela.Infrastructure.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace DevFreela.Infrastructure.Persistence.Repositories;
@@ -41,11 +42,6 @@ public class ProjectRepository : IProjectRepository
     public async Task AddCommentAsync(ProjectComment projectComment)
     {
         await _dbContext.Comments!.AddAsync(projectComment );
-        await SaveChangesAsync();
     }
 
-    public async Task SaveChangesAsync()
-    {
-        await _dbContext.SaveChangesAsync();
-    }
 }

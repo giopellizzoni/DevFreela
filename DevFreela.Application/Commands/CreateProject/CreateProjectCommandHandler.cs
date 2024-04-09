@@ -1,6 +1,7 @@
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using DevFreela.Infrastructure.Persistence;
+using DevFreela.Infrastructure.Persistence.UnityOfWork;
 using MediatR;
 
 namespace DevFreela.Application.Commands.CreateProject;
@@ -21,7 +22,7 @@ public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand,
         await _unityOfWork.BeginTransactionAsync();
         
         await _unityOfWork.Projects.AddAsync(project);
-        await _unityOfWork.CompleteAsync();
+        await _unityOfWork.SaveChangesAsync();
         
         await _unityOfWork.CommitTransactionAsync();
         return project.Id;

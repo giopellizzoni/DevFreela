@@ -1,6 +1,6 @@
 using DevFreela.Core.Repositories;
 
-namespace DevFreela.Infrastructure.Persistence;
+namespace DevFreela.Infrastructure.Persistence.UnityOfWork;
 
 public interface IUnityOfWork
 {
@@ -8,5 +8,5 @@ public interface IUnityOfWork
     IUserRepository Users { get; }
     Task BeginTransactionAsync();
     Task CommitTransactionAsync();
-    Task<int> CompleteAsync();
+    Task<int> SaveChangesAsync();
 }

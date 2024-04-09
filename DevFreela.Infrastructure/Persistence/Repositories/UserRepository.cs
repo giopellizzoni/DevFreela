@@ -22,7 +22,6 @@ public class UserRepository : IUserRepository
     public async Task AddUserAsync(User user)
     {
         await _dbContext.Users!.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<User?> GetUserByEmailAndPasswordAsync(string email, string passwordHash)

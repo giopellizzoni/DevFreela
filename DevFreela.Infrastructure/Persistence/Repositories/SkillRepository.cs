@@ -33,4 +33,9 @@ public class SkillRepository : ISkillRepository
         //     .ToList();
         // return skillsViewModel;
     }
+
+    public Task AddAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

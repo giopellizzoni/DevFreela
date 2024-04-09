@@ -16,12 +16,12 @@ builder.Services
     .AddInfrastructure(configuration)
     .AddApplication();
 
-builder.Services.AddControllers();
-// builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)));
+builder.Services.AddControllers(options => options.Filters.Add(typeof(ValidationFilter)));
 builder.Services.AddEndpointsApiExplorer();
+
 //FluentValidation
-// builder.Services.AddFluentValidationAutoValidation();
-// builder.Services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>();
 
 // MediatR
 

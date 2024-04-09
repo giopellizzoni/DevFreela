@@ -1,7 +1,7 @@
 using DevFreela.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DevFreela.Infrastructure.Persistence;
+namespace DevFreela.Infrastructure.Persistence.Extensions;
 
 public static class Extensions
 {

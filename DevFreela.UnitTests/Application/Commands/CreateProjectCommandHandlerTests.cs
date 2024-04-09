@@ -2,6 +2,7 @@ using DevFreela.Application.Commands.CreateProject;
 using DevFreela.Core.Entities;
 using DevFreela.Core.Repositories;
 using DevFreela.Infrastructure.Persistence;
+using DevFreela.Infrastructure.Persistence.UnityOfWork;
 using Moq;
 
 namespace DevFreela.UnitTests.Application.Commands;
@@ -31,4 +32,5 @@ public class CreateProjectCommandHandlerTests
         
         projectRepository.Verify(pr => pr.AddAsync(It.IsAny<Project>()), Times.Once);
     }
+    
 }

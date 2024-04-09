@@ -1,9 +1,9 @@
 using DevFreela.Core.Repositories;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace DevFreela.Infrastructure.Persistence;
+namespace DevFreela.Infrastructure.Persistence.UnityOfWork;
 
-public class UnitOfWork : IUnityOfWork
+public sealed class UnitOfWork : IUnityOfWork
 {
     private readonly DevFreelaDbContext _context;
     private IDbContextTransaction _transaction;
@@ -34,7 +34,7 @@ public class UnitOfWork : IUnityOfWork
         }
     }
 
-    public async Task<int> CompleteAsync()
+    public async Task<int> SaveChangesAsync()
     {
         return await _context.SaveChangesAsync();
     }
@@ -45,7 +45,7 @@ public class UnitOfWork : IUnityOfWork
         GC.SuppressFinalize(this);
     }
 
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (disposing)
         {
