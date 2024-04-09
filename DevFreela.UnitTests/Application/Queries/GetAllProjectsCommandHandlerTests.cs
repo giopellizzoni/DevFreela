@@ -13,10 +13,6 @@ public class GetAllProjectsCommandHandlerTests
     {
         var projects = new PaginationResult<Project>
         {
-            Page = 1,
-            TotalPages = 1,
-            ItemsCount = 3,
-            PageSize = 10,
             Data = new List<Project>
             {
                 new("Test Name1", "Test Description", 1, 2, 1000),
@@ -26,16 +22,17 @@ public class GetAllProjectsCommandHandlerTests
         };
 
         var projectRepositoryMock = new Mock<IProjectRepository>();
-        projectRepositoryMock.Setup(pr => pr.GetAllAsync("", 1).Result).Returns(projects);
+        projectRepositoryMock.Setup(pr => pr.GetAllAsync(It.IsAny<string>(), 
+            It.IsAny<int>()).Result).Returns(projects);
 
-        var getAllProjectsQuery = new GetAllProjectsQuery();
+
+        var getAllProjectsQuery = new GetAllProjectsQuery { Query = "", Page = 1};
         var getAllProjectsQueryHandler = new GetAllProjectsQueryHandler(projectRepositoryMock.Object);
 
-        var paginationProjectViewModelList = await getAllProjectsQueryHandler.Handle(getAllProjectsQuery,
-            new CancellationToken());
-        
-        
-        
+
+        var paginationProjectViewModelList = await getAllProjectsQueryHandler
+            .Handle(getAllProjectsQuery, new CancellationToken());
+
         Assert.NotNull(paginationProjectViewModelList);
         Assert.Equal(projects.Data.Count, paginationProjectViewModelList.Data.Count);
 
