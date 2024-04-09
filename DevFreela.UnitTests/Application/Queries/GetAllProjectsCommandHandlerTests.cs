@@ -31,14 +31,17 @@ public class GetAllProjectsCommandHandlerTests
         var getAllProjectsQuery = new GetAllProjectsQuery();
         var getAllProjectsQueryHandler = new GetAllProjectsQueryHandler(projectRepositoryMock.Object);
 
-        var projectViewModelList = await getAllProjectsQueryHandler.Handle(getAllProjectsQuery,
+        var paginationProjectViewModelList = await getAllProjectsQueryHandler.Handle(getAllProjectsQuery,
             new CancellationToken());
-        Assert.NotNull(projectViewModelList);
-        Assert.Equal(projects.Data.Count, projectViewModelList.Data.Count);
+        
+        
+        
+        Assert.NotNull(paginationProjectViewModelList);
+        Assert.Equal(projects.Data.Count, paginationProjectViewModelList.Data.Count);
 
         projectRepositoryMock
-            .Verify(pr => 
-                pr.GetAllAsync(It.IsAny<string>(), It.IsAny<int>()).Result, 
+            .Verify(pr =>
+                    pr.GetAllAsync(It.IsAny<string>(), It.IsAny<int>()).Result,
                 Times.Once);
     }
 }
