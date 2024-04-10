@@ -30,7 +30,6 @@ steps:
     ConnectionType: 'AzureRM'
     azureSubscription: 'PellizzoniCode(9b796839-d348-478f-b359-0c811498d0b7)'
     appType: 'webAppLinux'
-    WebAppName: 'devfreelagp'
+    WebAppName: 'jobhunting'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
     RuntimeStack: 'DOTNETCORE|7.0'
-
